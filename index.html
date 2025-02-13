@@ -11,8 +11,15 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: pink;
+            margin: 0;
             font-family: Arial, sans-serif;
+            background-image: url('file:///C:/Users/kksta/Pictures/Camera%20Roll/IMG_3647.JPG');
+            /* Replace with your initial image URL */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: background-image 0.5s ease-in-out;
+            overflow: hidden;
         }
 
         .button {
@@ -42,6 +49,9 @@
             text-align: center;
             box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
             animation: pop 0.5s ease-out;
+            z-index: 10;
+            transition: opacity 1s ease-in-out;
+            /* Smooth fade-out transition */
         }
 
         @keyframes pop {
@@ -71,23 +81,141 @@
                 transform: translateY(-10px);
             }
         }
+
+        .love-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <button class="button" onclick="showPopup()">Open</button>
+    <button class="button" id="open-button" onclick="showPopup()">Open</button>
     <div class="popup" id="popup">
         <div class="heart">❤️</div>
         <h2>Will you be my Valentine?</h2>
         <button class="button" onclick="answerYes()">Yes</button>
-        <button class="button" onclick="answerYes()">Yes</button>
+        <button class="button" onclick="answerYes()">Absolutely!</button>
     </div>
+
+    <!-- "I Love You!" Message -->
+    <div class="love-message" id="love-message">I Love You Jersie Yang!</div>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
+
+    <!-- Audio for Voice Recording -->
+    <audio id="voice-recording" src="c:\Users\kksta\Music\Recording.m4a" preload="auto"></audio>
+    <!-- Replace with your voice recording file -->
+
     <script>
+        // Function to show the popup
         function showPopup() {
             document.getElementById('popup').style.display = 'block';
+            document.getElementById('open-button').style.display = 'none'; // Hide the "Open" button
         }
+
+        // Function to handle the "Yes" button click
         function answerYes() {
+            const popup = document.getElementById('popup');
+            const loveMessage = document.getElementById('love-message');
+
+            // Change the background image
+            document.body.style.backgroundImage = "url('file:///C:/Users/kksta/Pictures/Camera%20Roll/IMG_6573.JPG')"; // Replace with your new image URL
+
+            // Play the voice recording
+            const audio = document.getElementById('voice-recording');
+            audio.play();
+
+            // Trigger confetti animation
+            startConfetti();
+
+            // Fade out the popup and show the "I Love You Jersie Yang!" message
+            popup.style.opacity = '0';
+            setTimeout(() => {
+                popup.style.display = 'none';
+                loveMessage.style.display = 'block';
+            }, 1000); // Wait for the fade-out transition to complete
+
+            // Show a celebratory alert
             alert('Yay! ❤️ Happy Valentine’s Day!');
+        }
+
+        // Confetti Animation
+        function startConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let confettiPieces = [];
+            const confettiColors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff'];
+
+            class Confetti {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height - canvas.height;
+                    this.size = Math.random() * 10 + 5;
+                    this.color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+                    this.speed = Math.random() * 3 + 2;
+                    this.angle = Math.random() * 360;
+                }
+
+                update() {
+                    this.y += this.speed;
+                    this.x += Math.sin(this.angle) * 2;
+                    this.angle += 0.1;
+
+                    if (this.y > canvas.height) {
+                        this.y = -this.size;
+                        this.x = Math.random() * canvas.width;
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.fillStyle = this.color;
+                    ctx.fillRect(this.x, this.y, this.size, this.size);
+                    ctx.closePath();
+                }
+            }
+
+            function createConfetti() {
+                for (let i = 0; i < 100; i++) {
+                    confettiPieces.push(new Confetti());
+                }
+            }
+
+            function animateConfetti() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                confettiPieces.forEach(confetti => {
+                    confetti.update();
+                    confetti.draw();
+                });
+                requestAnimationFrame(animateConfetti);
+            }
+
+            createConfetti();
+            animateConfetti();
         }
     </script>
 </body>
