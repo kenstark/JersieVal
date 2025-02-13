@@ -13,8 +13,7 @@
             height: 100vh;
             margin: 0;
             font-family: Arial, sans-serif;
-            background-image: url('IMG_6513.jpg');
-            /* Replace with your initial image URL */
+            background-image: url('initial-image.jpg'); /* Ensure this path is correct */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -51,7 +50,6 @@
             animation: pop 0.5s ease-out;
             z-index: 10;
             transition: opacity 1s ease-in-out;
-            /* Smooth fade-out transition */
         }
 
         @keyframes pop {
@@ -117,30 +115,26 @@
     </div>
 
     <!-- "I Love You!" Message -->
-    <div class="love-message" id="love-message">I Love You Jersie Yang!</div>
+    <div class="love-message" id="love-message">I Love You!</div>
 
     <!-- Confetti Canvas -->
-    <canvas id="confetti-canvas"
-        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
+    <canvas id="confetti-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
 
     <!-- Audio for Voice Recording -->
-    <audio id="voice-recording" src="Recording.m4a" preload="auto"></audio>
-    <!-- Replace with your voice recording file -->
+    <audio id="voice-recording" src="voice-recording.mp3" preload="auto"></audio>
 
     <script>
-        // Function to show the popup
         function showPopup() {
             document.getElementById('popup').style.display = 'block';
-            document.getElementById('open-button').style.display = 'none'; // Hide the "Open" button
+            document.getElementById('open-button').style.display = 'none';
         }
 
-        // Function to handle the "Yes" button click
         function answerYes() {
             const popup = document.getElementById('popup');
             const loveMessage = document.getElementById('love-message');
 
             // Change the background image
-            document.body.style.backgroundImage = "url('IMG_6513.jpg')"; // Replace with your new image URL
+            document.body.style.backgroundImage = "url('new-image.jpg')"; // Ensure this path is correct
 
             // Play the voice recording
             const audio = document.getElementById('voice-recording');
@@ -149,18 +143,17 @@
             // Trigger confetti animation
             startConfetti();
 
-            // Fade out the popup and show the "I Love You Jersie Yang!" message
+            // Fade out the popup and show the "I Love You!" message
             popup.style.opacity = '0';
             setTimeout(() => {
                 popup.style.display = 'none';
                 loveMessage.style.display = 'block';
-            }, 1000); // Wait for the fade-out transition to complete
+            }, 1000);
 
             // Show a celebratory alert
             alert('Yay! ❤️ Happy Valentine’s Day!');
         }
 
-        // Confetti Animation
         function startConfetti() {
             const canvas = document.getElementById('confetti-canvas');
             const ctx = canvas.getContext('2d');
